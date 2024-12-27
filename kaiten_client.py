@@ -1,6 +1,6 @@
 from request import make_request
 
-async def get_kaiten_config(url='http://127.0.0.1:8081/api/settings'):
+async def get_kaiten_config(url='https://test.born-in-july.ru/api/settings'):
     try:
         return await make_request(url=url)
     except Exception:
@@ -20,7 +20,7 @@ async def create_bug_ticket(kaiten_url, api_token, board_id, title, description)
         await make_request(url=f'{kaiten_url}/api/latest/cards',
                            method='POST',
                            data={'title': title, 'description': description, 'board_id': board_id},
-                           headers=f'Authorization: Bearer {api_token}')
+                           headers={"Authorization": f'Bearer {api_token}'})
     except Exception:
         return {"Error": str(Exception)}, 400
 
