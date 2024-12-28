@@ -7,14 +7,16 @@ from kaiten_client import get_kaiten_config, create_bug_ticket, create_task_tick
 
 logging.basicConfig(level=logging.INFO)
 
+logger = logging.getLogger(__name__)
+
 app = FastAPI()
 
 @app.post("/api/tickets")
 async def create_tickets(
     title: str = Form(...),
     description: str = Form(...),
-    files: List[UploadFile] = File(...)
-):
+    files: List[UploadFile] = File(...)) -> dict[str, str]:
+    
     config = await get_kaiten_config()
     result = list()
     
@@ -25,8 +27,8 @@ async def create_tickets(
         primary_key = item['primary']
 
         bug_ticket = await create_bug_ticket(kaiten_url, api_token, board_id, title, description)
-        await add_file_to_bug_ticket(kaiten_url, files, bug_ticket['id'])
-        await create_task_ticket(kaiten_url, bug_ticket['id'])
+        await add_file_to_bug_ticket(kaiten_url, api_token, files, bug_ticket['id'])
+        await create_task_ticket(kaiten_url, api_token, bug_ticket['id'])
 
         if primary_key:
             result.append({"ticket_url": f'{kaiten_url}/ticket/{bug_ticket["id"]}'})
