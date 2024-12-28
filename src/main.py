@@ -3,7 +3,8 @@ import logging
 from fastapi import FastAPI, File, Form, UploadFile
 from typing import List
 
-from kaiten_client import get_kaiten_config, create_bug_ticket, create_task_ticket, add_file_to_bug_ticket
+from logic.kaiten_client import get_kaiten_config, create_bug_ticket, create_task_ticket, add_file_to_bug_ticket
+from config import load_config
 
 logging.basicConfig(level=logging.INFO)
 
@@ -11,13 +12,15 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
+config_url = load_config()
+
 @app.post("/api/tickets")
 async def create_tickets(
     title: str = Form(...),
     description: str = Form(...),
     files: List[UploadFile] = File(...)) -> dict[str, str]:
     
-    config = await get_kaiten_config()
+    config = await get_kaiten_config(config_url["settings"]["url"])
     result = list()
     
     for item in config['kaiten_urls']:
