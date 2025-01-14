@@ -1,20 +1,18 @@
 from dataclasses import dataclass
 from typing import List
 
-from fastapi import UploadFile
+from fastapi import File, Form, UploadFile
+from pydantic import BaseModel
 
 
-@dataclass
-class Ticket:
-    title: str
-    description: str
-    files: List[UploadFile]
+class Ticket(BaseModel):
+    title: str = Form(...)
+    description: str = Form(...)
+    file: UploadFile = File(...)
     
-@dataclass
-class Space:
-    title: str
+class Space(BaseModel):
+    title: str = Form(...)
     
-@dataclass
-class Board:
-    space_id: int
-    title: str
+class Board(BaseModel):
+    space_id: int = Form(...)
+    title: str = Form(...)

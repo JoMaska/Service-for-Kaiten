@@ -79,12 +79,12 @@ class SingletonAiohttp:
         data: aiohttp.FormData=None, ) -> dict[str, Any]:
         
         client = cls.get_aiohttp_client()
-        try:
-            async with client.request(url=url, method=method, json=json, data=data, headers=headers) as response:
-                response.raise_for_status()
-                json_result = await response.json()
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Error while trying to make request: {e}")
+        #try:
+        async with client.request(url=url, method=method, json=json, data=data, headers=headers) as response:
+            response.raise_for_status()
+            json_result = await response.json()
+        #except Exception as e:
+            #raise HTTPException(status_code=500, detail=f"Error while trying to make request: {e}")
         
         return json_result
 

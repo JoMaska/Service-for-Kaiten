@@ -17,6 +17,11 @@ async def get_config_keycloak(settings: dict[str, Any]) -> dict[str, Any]:
             "client_secret": decoder.decrypt(settings['client_secret'].encode()).decode(),
         }
     
+    logger.debug("Attempt to get config")
+    
     response = await SingletonAiohttp.make_request(url=settings['auth_url'], method='POST', data=data)
     response = response['access_token']
+    
+    logger.debug("Config received successfully")
+    
     return response

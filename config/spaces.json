@@ -1,0 +1,19 @@
+{
+    "spaces": {
+      "space_1":
+      {
+        "id": 188,
+        "title": "JoMaskaSpace1",
+        "board_id": 157,
+        "primary_key": "True"
+      },
+      "space_2":
+      {
+        "id": 189,
+        "title": "JoMaskaSpace2",
+        "board_id": 158,
+        "primary_key": "False"
+      }
+    }
+  }
+  
