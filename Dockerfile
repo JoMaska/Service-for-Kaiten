@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./src/ .
 
-CMD ["uvicorn", "main:app", "--reload", "--port", "8080"]
+CMD ["uvicorn", "main:app", "--port", "8080"]

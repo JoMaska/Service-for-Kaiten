@@ -1,6 +1,3 @@
-from dataclasses import dataclass
-from typing import List
-
 from fastapi import File, Form, UploadFile
 from pydantic import BaseModel
 
