@@ -33,6 +33,7 @@ class SingletonAiohttp:
         client = cls.get_aiohttp_client()
 
         async with client.request(url=url, method=method, json=json, data=data, headers=headers) as response:
+            response.raise_for_status()
             json_result = await response.json()
     
         return json_result

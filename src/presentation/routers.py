@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter, File, Form, UploadFile
 
-from application.schemas import CreateAttachment, CreateChild, CreateTicket
+from application.schemas import CreateAttachment, CreateBoard, CreateChild, CreateSpace, CreateTicket
 from entities.schemas import Ticket, Board, Space
 from infrastructure.configs import load_config
 from application.client import create_attachment, create_board, create_child, create_space, create_ticket
@@ -35,7 +35,7 @@ async def create_space_endpoint(
     
     url = config["settings"]["standart_url"]
     api_token = await get_config_keycloak(config["secrets"])
-    response = await create_space(url, space.title, api_token)
+    response = await create_space(CreateSpace(url=url, title=space.title, api_token=api_token))
     
     return response
 
@@ -47,6 +47,6 @@ async def create_board_endpoint(
     
     url = config["settings"]["standart_url"]
     api_token = await get_config_keycloak(config["secrets"])
-    response = await create_board(url, board.space_id, board.title, api_token)
+    response = await create_board(CreateBoard(url=url, space_id=board.space_id, title=board.title, api_token=api_token))
     
     return response

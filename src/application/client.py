@@ -59,10 +59,10 @@ async def create_space(
             headers={"Authorization": f'api-key {space.api_token}'})
         
         return response
-    
+
     except aiohttp.ClientResponseError as Error:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error when creating a space: {Error}")
-
+        
 async def create_board(
     board: CreateBoard
     ) -> dict[str, Any]:
@@ -78,7 +78,7 @@ async def create_board(
     
     except aiohttp.ClientResponseError as Error:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error when creating a board: {Error}")
-
+        
 async def create_child(
     child: CreateChild
     ) -> dict[str, Any]:
