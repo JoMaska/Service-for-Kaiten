@@ -3,9 +3,7 @@ from typing import Any
 
 from application.client import create_attachment, create_child, create_ticket
 from entities.constant import CardType
-from entities.schemas import Ticket
-from infrastructure.configs import Config, load_config
-from infrastructure.keyclock.config_keyclock import get_access_token_config_keycloak
+from infrastructure.configs import load_config
 from .schemas import CreateAttachment, CreateTicket, CreateChild, ProcessTicketBug
 
 logger = logging.getLogger(__name__)
