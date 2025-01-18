@@ -2,7 +2,7 @@ import logging
 from typing import Any
 from fastapi import APIRouter, File, Form, UploadFile
 
-from application.schemas import CreateBoard, CreateSpace
+from application.schemas import CreateBoard, CreateSpace, ProcessTicketBug
 from entities.schemas import Ticket, Board, Space
 from infrastructure.configs import load_config
 from application.client import create_board, create_space
@@ -17,14 +17,22 @@ router = APIRouter()
 
 @router.post("/api/tickets")
 async def create_tickets_endpoint(
-    #ticket: Ticket = Form(...)):
     title: str = Form(...),
     description: str = Form(...),
     file: UploadFile = File(...),
     ) -> dict[str, Any]:
     
-    url = config["settings"]["standart_url"]
-    response = await process_ticket_bug(Ticket(title=title, description=description, file=file))
+    url = config.tododdler.url
+    api_token = await get_access_token_config_keycloak(config)
+    response = await process_ticket_bug(
+        ProcessTicketBug(
+            url=url,
+            ticket=Ticket(
+                title=title, description=description, file=file
+                ),
+            config=config,
+            api_token=api_token)
+        )
     
     return {"ticket_url": f'{url}ticket/{response["id"]}'}
 
@@ -35,8 +43,8 @@ async def create_space_endpoint(
     
     logger.debug("Attempt to create space")
     
-    url = config["settings"]["standart_url"]
-    api_token = await get_access_token_config_keycloak(config["secrets"])
+    url = config.tododdler.url
+    api_token = await get_access_token_config_keycloak(config)
     response = await create_space(CreateSpace(url=url, title=space.title, api_token=api_token))
     
     return response
@@ -48,8 +56,8 @@ async def create_board_endpoint(
     
     logger.debug("Attempt to create board")
     
-    url = config["settings"]["standart_url"]
-    api_token = await get_access_token_config_keycloak(config["secrets"])
+    url = config.tododdler.url
+    api_token = await get_access_token_config_keycloak(config)
     response = await create_board(CreateBoard(url=url, space_id=board.space_id, title=board.title, api_token=api_token))
     
     return response

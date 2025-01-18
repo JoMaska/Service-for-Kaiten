@@ -2,6 +2,9 @@ from typing import Optional
 from fastapi import UploadFile
 from pydantic import BaseModel
 
+from entities.schemas import Ticket
+from infrastructure.configs import Config
+
 
 class CreateCardRequest(BaseModel):
     board_id: int
@@ -39,4 +42,10 @@ class CreateBoard(BaseModel):
 class CreateChild(BaseModel):
     url: str
     card_id: int
+    api_token: str
+
+class ProcessTicketBug(BaseModel):
+    url: str
+    ticket: Ticket
+    config: Config
     api_token: str

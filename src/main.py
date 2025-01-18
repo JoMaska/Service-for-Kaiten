@@ -1,7 +1,7 @@
 import logging
 
 from fastapi import FastAPI
-from src.presentation.fastapi import api_router
+from presentation.fastapi import api_router
 from infrastructure.aiohttp.aiohttp_session import on_shutdown, on_start_up
 
 logger = logging.getLogger(__name__)
