@@ -1,111 +1,96 @@
 import logging
+import aiohttp
 import httpx
 from typing import Any
 
-from fastapi import HTTPException, UploadFile
+from fastapi import HTTPException, UploadFile, status
 from infrastructure.aiohttp.aiohttp_session import SingletonAiohttp
+from .schemas import CreateAttachment, CreateTicket, CreateSpace, CreateBoard, CreateChild
 
 logger = logging.getLogger(__name__)
     
 async def create_attachment(
-    url: str,
-    card_id: id,
-    file: UploadFile,
-    api_token: str,
+    attachment: CreateAttachment
     ) -> dict[str, Any]:
     
     try:    
         async with httpx.AsyncClient() as client:
-                    content = await file.read()
+                    content = await attachment.file.read()
                     response = await client.post(
-                        f"{url}api/card/{card_id}/attachment",
-                        headers={"Authorization": f"api-key {api_token}"},
-                        files={"file": (file.filename, content)}
+                        f"{attachment.url}api/card/{attachment.card_id}/attachment",
+                        headers={"Authorization": f"api-key {attachment.api_token}"},
+                        files={"file": (attachment.file.filename, content)}
                     )
-                    response.raise_for_status() 
-                    
-    except Exception as Error:
-        raise HTTPException(status_code=400, detail=f"Error when attaching file: {Error}")
-    else:
+        
         return response.json()
+    
+    except aiohttp.ClientResponseError as Error:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error when attaching file: {Error}")
 
 async def create_ticket(
-    url: str,
-    board_id: int,
-    title: str,
-    description: str,
-    deadline: str,
-    type: str,
-    api_token: str
-    ) -> dict[str, Any]:
+    ticket: CreateTicket) -> dict[str, Any]:
     
     try:
         response = await SingletonAiohttp.make_request(
-            url=f"{url}api/card",
-            method="POST",
-            json={"board_id": board_id,
-                "title": title,
-                "description": description,
-                "deadline": deadline,
-                "type": type, },
-            headers={"Authorization": f'api-key {api_token}'})
+                url=f"{ticket.url}api/card",
+                method="POST",
+                json={"board_id": ticket.board_id,
+                        "title": ticket.title,
+                        "description": ticket.description,
+                        "deadline": ticket.deadline,
+                        "type": ticket.type, },
+                headers={"Authorization": f'api-key {ticket.api_token}'}
+            )
         
-    except Exception as Error:
-        raise HTTPException(status_code=400, detail=f"Error when creating a ticket: {Error}")
-    else:
         return response
+    
+    except aiohttp.ClientResponseError as Error:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error when creating a ticket: {Error}")
 
 async def create_space(
-    url: str,
-    title: str,
-    api_token: str
+    space: CreateSpace
     ) -> dict[str, Any]:
     
     try:
         response = await SingletonAiohttp.make_request(
-            url=f"{url}api/space",
+            url=f"{space.url}api/space",
             method="POST",
-            json={"title": title},
-            headers={"Authorization": f'api-key {api_token}'})
+            json={"title": space.title},
+            headers={"Authorization": f'api-key {space.api_token}'})
         
-    except Exception as Error:
-        raise HTTPException(status_code=400, detail=f"Error when creating a space: {Error}")
-    else:
         return response
+    
+    except aiohttp.ClientResponseError as Error:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error when creating a space: {Error}")
 
 async def create_board(
-    url: str,
-    space_id: int,
-    title: str,
-    api_token: str
+    board: CreateBoard
     ) -> dict[str, Any]:
     
     try:
         response = await SingletonAiohttp.make_request(
-            url=f"{url}api/board",
+            url=f"{board.url}api/board",
             method="POST",
-            json={"space_id": space_id, "title": title},
-            headers={"Authorization": f'api-key {api_token}'})
+            json={"space_id": board.space_id, "title": board.title},
+            headers={"Authorization": f'api-key {board.api_token}'})
         
-    except Exception as Error:
-        raise HTTPException(status_code=400, detail=f"Error when creating a board: {Error}")
-    else:
         return response
+    
+    except aiohttp.ClientResponseError as Error:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error when creating a board: {Error}")
 
 async def create_child(
-    url: str,
-    card_id: int,
-    api_token: str
+    child: CreateChild
     ) -> dict[str, Any]:
     
     try:
         response = await SingletonAiohttp.make_request(
-            url=f"{url}api/card/{card_id}/children",
-            json={"card_id": card_id},
+            url=f"{child.url}api/card/{child.card_id}/children",
+            json={"card_id": child.card_id},
             method="POST",
-            headers={"Authorization": f'api-key {api_token}'})
+            headers={"Authorization": f'api-key {child.api_token}'})
         
-    except Exception as Error:
-        raise HTTPException(status_code=400, detail=f"Error when creating a child: {Error}")
-    else:
         return response
+    
+    except aiohttp.ClientResponseError as Error:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error when creating a child: {Error}")        

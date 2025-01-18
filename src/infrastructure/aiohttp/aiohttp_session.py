@@ -1,8 +1,7 @@
 import logging
-from typing import Any, Optional
-
 import aiohttp
-from fastapi import HTTPException
+
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -32,13 +31,10 @@ class SingletonAiohttp:
         data: aiohttp.FormData=None, ) -> dict[str, Any]:
         
         client = cls.get_aiohttp_client()
-        try:
-            async with client.request(url=url, method=method, json=json, data=data, headers=headers) as response:
-                response.raise_for_status()
-                json_result = await response.json()
-        except Exception as Error:
-            raise HTTPException(status_code=500, detail=f"Error while trying to make request: {Error}")
-        
+
+        async with client.request(url=url, method=method, json=json, data=data, headers=headers) as response:
+            json_result = await response.json()
+    
         return json_result
 
 async def on_start_up() -> None:
