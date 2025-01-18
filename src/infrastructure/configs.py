@@ -18,7 +18,7 @@ from dynaconf import Dynaconf
 # #     client_id: str
 # #     client_secret: str
 
-def load_config():
+def load_config() -> Dynaconf:
         settings = Dynaconf(
             settings_files=[os.environ['CONFIG_PATH'],
                             os.environ['SECRETS_PATH'],

@@ -28,7 +28,8 @@ async def create_attachment(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error when attaching file: {Error}")
 
 async def create_ticket(
-    ticket: CreateTicket) -> dict[str, Any]:
+    ticket: CreateTicket
+    ) -> dict[str, Any]:
     
     try:
         response = await SingletonAiohttp.make_request(

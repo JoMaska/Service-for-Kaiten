@@ -1,0 +1,5 @@
+# Example .env file
+
+CONFIG_PATH="config\config.toml"
+SECRETS_PATH="config\.secrets.toml"
+SPACES_PATH="config\spaces.json"

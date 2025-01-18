@@ -1,0 +1,4 @@
+# Example config.toml file
+
+[settings]
+standart_url = "https://..."

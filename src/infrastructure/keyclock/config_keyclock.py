@@ -10,7 +10,7 @@ from .schemas import KeyclockData, KeyclockConfig
 
 logger = logging.getLogger(__name__)
 
-async def get_config_keycloak(settings: dict[str, Any]) -> dict[str, Any]:
+async def get_access_token_config_keycloak(settings: dict[str, Any]) -> str:
     try:
         decoder = Fernet(settings['secret_key'])
         

@@ -9,7 +9,7 @@ from application.client import create_attachment, create_child, create_ticket
 from entities.constant import CardType
 from entities.schemas import Ticket
 from infrastructure.configs import load_config
-from infrastructure.keyclock.config_keyclock import get_config_keycloak
+from infrastructure.keyclock.config_keyclock import get_access_token_config_keycloak
 from .schemas import CreateAttachment, CreateTicket, CreateSpace, CreateBoard, CreateChild
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ async def process_ticket_bug(
         boards_ids[space["board_id"]] = space["primary_key"]
     
     url = config["settings"]["standart_url"]
-    api_token = await get_config_keycloak(config["secrets"])
+    api_token = await get_access_token_config_keycloak(config["secrets"])
     
     primary_tickets = list()
     
@@ -76,6 +76,6 @@ async def process_ticket_bug(
         
         ticket_child = await create_child(child)
         
-        logger.info(ticket_child)
+        logger.debug(ticket_child)
         
-        return primary_tickets[0]
+    return primary_tickets[0]
