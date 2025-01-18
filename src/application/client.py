@@ -3,7 +3,7 @@ import aiohttp
 import httpx
 from typing import Any
 
-from fastapi import HTTPException, UploadFile, status
+from fastapi import HTTPException, status
 from infrastructure.aiohttp.aiohttp_session import SingletonAiohttp
 from .schemas import CreateAttachment, CreateTicket, CreateSpace, CreateBoard, CreateChild
 

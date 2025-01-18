@@ -2,12 +2,11 @@ import logging
 from typing import Any
 from fastapi import APIRouter, File, Form, UploadFile
 
-from application.schemas import CreateAttachment, CreateBoard, CreateChild, CreateSpace, CreateTicket
+from application.schemas import CreateBoard, CreateSpace
 from entities.schemas import Ticket, Board, Space
 from infrastructure.configs import load_config
-from application.client import create_attachment, create_board, create_child, create_space, create_ticket
+from application.client import create_board, create_space
 from infrastructure.keyclock.config_keyclock import get_access_token_config_keycloak
-from entities.constant import CardType
 from application.process_client import process_ticket_bug
 
 logger = logging.getLogger(__name__)

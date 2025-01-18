@@ -1,16 +1,12 @@
 import logging
-import aiohttp
-import httpx
 from typing import Any
 
-from fastapi import HTTPException, UploadFile, status
-from infrastructure.aiohttp.aiohttp_session import SingletonAiohttp
 from application.client import create_attachment, create_child, create_ticket
 from entities.constant import CardType
 from entities.schemas import Ticket
 from infrastructure.configs import load_config
 from infrastructure.keyclock.config_keyclock import get_access_token_config_keycloak
-from .schemas import CreateAttachment, CreateTicket, CreateSpace, CreateBoard, CreateChild
+from .schemas import CreateAttachment, CreateTicket, CreateChild
 
 logger = logging.getLogger(__name__)
 
